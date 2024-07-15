@@ -1,0 +1,22 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+/api/api/creditunioncharges/get?Keyword=&SkipCount=0&MaxResultCount=10%------%${Type},1,1101,1101,1101,0.00,0.000%,.90827,2.18,1.10,2456.0
+/api/api/loanconst/interestratecalculationmethod------%${Type},1,439,439,439,0.00,0.000%,2.27790,3.47,2.72,1559.0
+/api/api/loanconst/loanapplicationstage------%${Type},1,436,436,436,0.00,0.000%,2.29358,3.93,2.72,1756.0
+/api/api/loanconst/tenureperiodtype------%${Type},1,435,435,435,0.00,0.000%,2.29885,3.61,2.71,1607.0
+/api/api/loanconst/periodtype------%${Type},1,431,431,431,0.00,0.000%,2.32019,3.48,2.73,1536.0
+/api/api/services/app/Role/GetRoles------%${Type},1,433,433,433,0.00,0.000%,2.30947,7.45,2.77,3302.0
+/api/api/user/2------%${Type},1,1473,1473,1473,0.00,0.000%,.67889,0.93,0.80,1404.0
+/api/api/loan/loantype------%${Type},1,824,824,824,0.00,0.000%,1.21359,2.31,1.44,1951.0
+/api/api/loanconst/accrualintrestcalculationterm------%${Type},1,431,431,431,0.00,0.000%,2.32019,3.46,2.82,1527.0
+/api/api/services/app/Account/GetAccountingCodes------%${Type},1,1695,1695,1695,0.00,0.000%,.58997,4.28,0.72,7426.0
+/api/api/paymentproviders/repayment------%${Type},1,711,711,711,0.00,0.000%,1.40647,4.51,1.66,3284.0
+/api/api/policy/creditproductpolicy/create------%${Type},1,1895,1895,1895,0.00,0.000%,.52770,0.76,3.95,1469.0
+/api/api/policy/creditproductpolicy/getall?Keyword=&SkipCount=0&MaxResultCount=5------%${Type},1,565,565,565,0.00,0.000%,1.76991,16.85,2.17,9750.0
+/api/api/policy/creditproductpolicy/90------%${Type},1,548,548,548,0.00,0.000%,1.82482,7.44,2.16,4174.0
+/api/api/policy/creditproductpolicy/active------%${Type},1,539,539,539,0.00,0.000%,1.85529,6.53,2.20,3603.0
+/api/loanproduct/productaccountsetting?loanProductId=90,1,791,791,791,0.00,0.000%,1.26422,3.01,1.52,2435.0
+/api/api/policy/creditproductpolicy/approvalstatuslist/90------%${Type},1,796,796,796,0.00,0.000%,1.25628,1.90,1.54,1551.0
+/api/api/policy/creditproductpolicy/representative/approve-----%${Type},1,1508,1508,1508,0.00,0.000%,.66313,0.95,0.88,1467.0
+api/api/client/quickloan,1,20241,20241,20241,0.00,0.000%,.04940,0.88,0.05,18176.0
+/api/api/client/quickloan/apply,1,4707,4707,4707,0.00,0.000%,.21245,0.29,0.22,1375.0
+TOTAL,20,1999,431,20241,4292.22,0.000%,.49783,1.75,0.75,3590.4
