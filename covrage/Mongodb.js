@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const uri = "mongodb://localhost:27017/coveredapidata";
+const uri = "mongodb+srv://saksham:123@cluster0.valizbn.mongodb.net/";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let storeddata = "";
 
