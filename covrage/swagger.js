@@ -4,9 +4,7 @@ import multer from "multer";
 import csv from 'csv-parser';
 import fs from 'fs';
 import cors from 'cors';
-import path from "path";
 import run, { storeddata, readData } from "./Mongodb.js";
-import { log } from "console";
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });

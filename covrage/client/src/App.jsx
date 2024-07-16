@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  LogarithmicScale,
 } from 'chart.js';
 import './App.css';
 
@@ -35,6 +36,7 @@ function App() {
   const [coveredApiEndpoints,setCoveredApiEndpoints]=useState("")
   const [chartData, setChartData] = useState({});
   const [showCharts, setShowCharts] = useState(false);
+  const [dbCoveragestats,setDbCoverageStats]=useState([]);
   const [show,setShow]= useState(true)
   const [loader,setLoader]=useState(false)
   let count=1
@@ -42,35 +44,32 @@ function App() {
     setFile(e.target.files[0]);
     
   };
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.post(`${BACKEND_URL}/verify`, { "message": "hello" });
+      setPrevdata(res.data);
+      console.log("this is a previously stored data------------>",prevdata);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.post(`${BACKEND_URL}/verify`, { message: "hello" });
-        setPrevdata(res.data);
-        console.log("this is a previously stored data------------>",prevdata);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    
+fetchData();
   }, []);
 
   useEffect(() => {
     
     let array2 = coverageList
-    
+    console.log("coverage list",coverageList);
     let mergedArray = [];
 
-    
-
-    // Step 2: Loop through array1 and array2
     [prevdata, array2].forEach((array) => {
         array.forEach((obj) => {
-            // Step 3: Check if object exists in mergedArray based on unique key (e.g., id)
             let existingObj = mergedArray.find((o) => o.path === obj.path && o.method===obj.method);
             if (!existingObj) {
-                // Step 4: Add object to mergedArray if it doesn't exist
                 mergedArray.push(obj);
             }
         });
@@ -128,15 +127,14 @@ function App() {
 
 
   const swag = async () => {
-    console.log("i runned-------------------->",count);
-    count++
+     
     try {
       const { data } = await axios.get(`${BACKEND_URL}/`);
-      setApiList(data.data); // Update the state with fetched data
+   
       let CAMS = data.data
       console.log("cams",CAMS.length);
       updateCoverageList(CAMS, endpoints);
-      axios.post(`${BACKEND_URL}/store`,coveredApiEndpoints);
+     
     } catch (error) {
       console.log("error", error);
     }    
@@ -147,6 +145,19 @@ function App() {
       {
         label: '# of APIs',
         data: [coverageStats.covered, coverageStats.notCovered],
+        backgroundColor: ['rgba(20, 121, 30, 0.5)', 'rgba(209, 59, 25, 0.5)'],
+        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+        borderWidth: 1,
+      },
+    ],
+  }
+
+  const dbChartdata = {
+    labels: ['Covered', 'Not Covered'],
+    datasets: [
+      {
+        label: '# of APIs',
+        data: [dbCoveragestats.covered, dbCoveragestats.notCovered],
         backgroundColor: ['rgba(20, 121, 30, 0.5)', 'rgba(209, 59, 25, 0.5)'],
         borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
         borderWidth: 1,
@@ -195,6 +206,52 @@ useEffect(()=>{
   axios.post(`${BACKEND_URL}/store`,coveredApiEndpoints);
 },[coveredApiEndpoints])
 
+// <---------------- Extract stored api -------------->
+
+const check = async () => {
+   try {
+    const { data } = await axios.get(`${BACKEND_URL}/`)
+    let CAMS = data.data;
+     await fetchData();
+    console.log("cams is", CAMS);
+    
+     console.log("it is",prevdata);
+     const paths=prevdata.map((data)=>{
+      return data.path
+     })
+     console.log("paths are",paths);
+    const coverage = CAMS.map(api => ({
+      ...api,
+      covered: paths.includes(api.path) 
+    }));
+
+    let mergedArray = [];
+
+    [prevdata, coverage].forEach((array) => {
+      array.forEach((obj) => {
+        let existingObj = mergedArray.find((o) => o.path === obj.path && o.method === obj.method);
+        if (!existingObj) {
+          mergedArray.push(obj);
+          
+        }
+      });
+    });
+    setApiList(mergedArray)
+    
+  console.log("db stats are",dbCoveragestats);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+ 
+};
+useEffect(()=>{
+  const covered = apiList.filter((arr) => arr.covered).length;
+  const notCovered = apiList.length - covered;
+  setDbCoverageStats({ covered, notCovered });
+},[prevdata,apiList])
+
+// <---------------- Extract stored api -------------->
+
 if(loader){
   return(
     <div class="loader-container">
@@ -222,6 +279,7 @@ if(show){
               <button type="submit" className='bg-blue-600 p-3 rounded-md mt-3 font-semibold'>Upload</button>
             </form>
             <button className='bg-green-500 font-semibold rounded-lg items-end p-3 my-3' onClick={done}>Click to extract Api</button>
+            <button className='bg-green-500 font-semibold rounded-lg items-end p-3 my-3' onClick={check}>Click to extract Checked Api</button>
           </div>
         </div>
          {showCharts &&(
@@ -230,10 +288,10 @@ if(show){
             <h3 className='text-center bg-slate-200 font-semibold'>Api Performance Test Covrage</h3>
             <Pie data={chartdata} />
           </div>
-          {/* <div className='h-[400px]'>
-            <h3 className='text-center bg-slate-200 font-semibold'>Api Security Test Covrage</h3>
-            <Pie data={chartData} />
-          </div> */}
+          <div className='h-[400px]'>
+            <h3 className='text-center bg-slate-200 font-semibold'>Database Api Test Covrage</h3>
+            <Pie data={dbChartdata} />
+          </div>
         </div>
 )}
         <div>

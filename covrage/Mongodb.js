@@ -17,7 +17,7 @@ async function run(Data) {
             const existingDocument = await collection.findOne({
                 path: data.path,
                 method: data.method,
-                covered: data.covered
+
             });
 
             if (existingDocument) {
